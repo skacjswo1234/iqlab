@@ -20,13 +20,31 @@
       line-height: 1.6;
       padding-bottom: 140px;
     }
-    header, footer { background: var(--beige); }
+    footer { 
+      background: var(--deep);
+      color: #fff;
+    }
     header {
       padding: 8px 12px;
-      border-bottom: 1px solid var(--border);
+      border-bottom: 1px solid transparent;
       position: sticky;
       top: 0;
       z-index: 20;
+      background-color: transparent !important;
+      background: transparent !important;
+      transition: background-color 0.3s ease, background 0.3s ease, border-bottom-color 0.3s ease;
+    }
+    .drawer-open header {
+      z-index: 19;
+    }
+    header:not(.scrolled) {
+      background-color: transparent !important;
+      background: transparent !important;
+    }
+    header.scrolled {
+      background-color: var(--beige) !important;
+      background: var(--beige) !important;
+      border-bottom-color: var(--border);
     }
     .header-inner {
       width: 100%;
@@ -36,6 +54,7 @@
       grid-template-columns: auto 1fr auto;
       align-items: center;
       column-gap: 18px;
+      position: relative;
     }
     nav {
       display: flex;
@@ -67,6 +86,13 @@
       line-height: 1;
       justify-self: end;
     }
+    .menu-btn:focus,
+    .menu-btn:active {
+      background: none;
+      color: var(--deep);
+      outline: none;
+      box-shadow: none;
+    }
     .logo {
       width: auto;
       max-width: 280px;
@@ -83,6 +109,9 @@
       display: flex;
       justify-content: center;
       padding: 0 16px;
+      margin-top: -140px;
+      position: relative;
+      z-index: 1;
     }
     .hero-banner img {
       display: block;
@@ -151,7 +180,7 @@
       opacity: 0;
       pointer-events: none;
       transition: opacity 0.2s ease;
-      z-index: 18;
+      z-index: 20;
     }
     .side-drawer {
       position: fixed;
@@ -163,7 +192,7 @@
       box-shadow: -6px 0 20px rgba(12, 48, 73, 0.15);
       padding: 20px 18px;
       transition: right 0.25s ease;
-      z-index: 19;
+      z-index: 21;
       display: flex;
       flex-direction: column;
       gap: 18px;
@@ -172,7 +201,11 @@
       width: 100%;
       max-width: 200px;
       height: auto;
-      margin-bottom: 6px;
+      margin-top: auto;
+      margin-bottom: 0;
+    }
+    .drawer-links {
+      margin-top: 60px;
     }
     .drawer-links a {
       display: block;
@@ -184,6 +217,32 @@
       transition: background 0.2s ease;
     }
     .drawer-links a:hover { background: rgba(12, 48, 73, 0.1); }
+    .drawer-close {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      width: 36px;
+      height: 36px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: #fff;
+      color: var(--deep);
+      font-weight: 800;
+      font-size: 18px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 6px 16px rgba(12,48,73,0.12);
+      z-index: 21;
+    }
+    .drawer-close:focus,
+    .drawer-close:active {
+      background: #fff;
+      color: var(--deep);
+      outline: none;
+      box-shadow: 0 6px 16px rgba(12,48,73,0.12);
+    }
     .drawer-open .drawer-overlay {
       opacity: 1;
       pointer-events: auto;
@@ -194,8 +253,8 @@
     footer {
       padding: 18px 16px;
       text-align: center;
-      border-top: 1px solid var(--border);
-      color: #4a5563;
+      border-top: 1px solid rgba(255,255,255,0.2);
+      color: #fff;
       font-size: 13px;
     }
     .desktop-ribbon {
@@ -210,18 +269,29 @@
       box-shadow: 0 -10px 30px rgba(0,0,0,0.18);
     }
     .desktop-ribbon .ribbon-inner {
-      max-width: 1220px;
+      max-width: 980px;
       margin: 0 auto;
-      display: grid;
-      grid-template-columns: 1.2fr 0.8fr;
+      display: flex;
       align-items: center;
-      gap: 16px;
+      gap: 10px;
     }
     .ribbon-left {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 10px;
+      display: flex;
+      flex-wrap: nowrap;
+      gap: 6px;
       align-items: center;
+      flex: 1;
+      min-width: 0;
+    }
+    .ribbon-left .ribbon-form-item {
+      flex: 1;
+      min-width: 0;
+    }
+    .ribbon-logo {
+      width: auto;
+      height: 80px;
+      flex-shrink: 0;
+      margin-right: 12px;
     }
     .ribbon-eyebrow {
       font-size: 14px;
@@ -263,41 +333,55 @@
     .ribbon-actions .ribbon-btn:hover { transform: translateY(-1px); }
     .ribbon-right {
       display: flex;
-      gap: 0;
+      gap: 8px;
       align-items: center;
+      flex-shrink: 0;
     }
     .ribbon-form {
       display: contents;
     }
     .ribbon-form input,
+    .ribbon-form textarea,
     .ribbon-form button {
       width: 100%;
-      padding: 12px 14px;
-      border-radius: 10px;
+      padding: 12px 16px;
+      border-radius: 7px;
       border: none;
       font-weight: 700;
-      font-size: 14px;
+      font-size: 12px;
+      line-height: 1.35;
+      height: auto;
     }
-    .ribbon-form input {
+    .ribbon-form input,
+    .ribbon-form textarea {
       background: rgba(255,255,255,0.12);
       color: #fff;
       border: 1px solid rgba(255,255,255,0.18);
     }
-    .ribbon-form input::placeholder { color: rgba(255,255,255,0.78); }
+    .ribbon-form textarea {
+      resize: none;
+      min-height: auto;
+      height: auto;
+      overflow: hidden;
+    }
+    .ribbon-form input::placeholder,
+    .ribbon-form textarea::placeholder { color: rgba(255,255,255,0.78); }
     .ribbon-form button {
       background: #e2b87b;
       color: #0c3049;
       cursor: pointer;
       box-shadow: 0 8px 18px rgba(0,0,0,0.18);
       transition: transform 0.1s ease, box-shadow 0.2s ease;
+      font-size: 14px;
     }
     .ribbon-form button:hover { transform: translateY(-1px); }
     .ribbon-timer {
-      width: 96px;
-      height: 96px;
+      position: relative;
+      width: 100px;
+      height: 100px;
       border-radius: 50%;
       background: radial-gradient(circle at 30% 30%, #f7e9c6, #d9b06a 55%, #0c3049 100%);
-      box-shadow: 0 14px 28px rgba(0,0,0,0.28);
+      box-shadow: 0 12px 24px rgba(0,0,0,0.24);
       border: 2px solid rgba(255,255,255,0.24);
       display: flex;
       flex-direction: column;
@@ -305,11 +389,27 @@
       justify-content: center;
       color: #0c3049;
       font-weight: 800;
+      font-size: 20px;
+      letter-spacing: 0.4px;
+      transform: translateX(4px);
+    }
+    .ribbon-timer::after {
+      content: "⏱️";
+      position: absolute;
+      right: -20px;
+      top: 50%;
+      transform: translate(4px, -50%);
       font-size: 18px;
-      letter-spacing: 0.5px;
+      filter: drop-shadow(0 2px 6px rgba(0,0,0,0.18));
+    }
+    .ribbon-cta-text {
+      font-size: 15px;
+      font-weight: 800;
+      color: #e2b87b;
+      white-space: nowrap;
     }
     .ribbon-timer small {
-      font-size: 12px;
+      font-size: 14px;
       color: #0c3049;
       opacity: 0.85;
     }
@@ -322,6 +422,16 @@
       border: 2px solid rgba(255,255,255,0.22);
     }
     .ribbon-pill.small { width: 72px; height: 72px; opacity: 0.9; }
+    .desktop-actions {
+      display: flex;
+      position: fixed;
+      right: 18px;
+      bottom: 160px;
+      z-index: 18;
+      gap: 10px;
+      flex-direction: column;
+      align-items: flex-end;
+    }
     .mobile-actions {
       display: none;
       position: fixed;
@@ -351,6 +461,13 @@
       align-items: center;
       justify-content: center;
       box-shadow: 0 6px 16px rgba(12,48,73,0.12);
+    }
+    .icon-btn:focus,
+    .icon-btn:active {
+      background: #fff;
+      color: var(--deep);
+      box-shadow: 0 6px 16px rgba(12,48,73,0.12);
+      outline: none;
     }
     .mobile-cta-bar {
       display: none;
@@ -385,19 +502,28 @@
       .header-inner {
         max-width: 100%;
         column-gap: 12px;
-        grid-template-columns: auto 1fr auto;
+        grid-template-columns: 1fr auto;
+        padding-right: 10px;
       }
       .logo { max-width: 200px; }
       .menu-btn {
         font-size: 26px;
         padding: 8px 10px;
-        margin-right: 4px;
+        margin-left: auto;
+        position: static;
+        transform: none;
+        justify-self: end;
+        align-self: center;
+      }
+      .hero-banner {
+        margin-top: -80px;
       }
       main { padding: 28px 14px 140px; }
       .card { padding: 22px 18px 26px; }
       .card h1 { font-size: 20px; margin-bottom: 14px; }
       button { width: 100%; }
       .desktop-ribbon { display: none; }
+      .desktop-actions { display: none; }
       .mobile-actions { display: flex; }
       .mobile-cta-bar { display: flex; }
     }
@@ -408,9 +534,9 @@
     <div class="header-inner">
       <img class="logo" src="./iqlab-logo.png" alt="IQLAB 아이큐랩 시스템 로고">
       <nav>
-        <a href="#">홈</a>
-        <a href="#">소개</a>
-        <a href="#">무료신청하기</a>
+        <a href="#top">소개</a>
+        <a href="https://www.iq-edu.co.kr/newspaper" target="_blank" rel="noopener noreferrer">아이Q신문</a>
+        <a href="#contact-form">무료신청하기</a>
       </nav>
       <button class="menu-btn" aria-label="메뉴 열기">☰</button>
     </div>
@@ -420,22 +546,22 @@
     <img src="./images/h-1.png" alt="손지연 NIE 연구소 IQLAB 아이큐랩 시스템 대표 이미지">
   </div>
 
-  <main>
+  <main id="contact-form">
     <section class="card">
       <h1>무료 신청하기 / 문의 폼</h1>
       <form>
         <div>
-          <label for="name">성함</label>
-          <input id="name" name="name" type="text" placeholder="홍길동" required>
+          <label for="contact-name">이름</label>
+          <input id="contact-name" name="name" type="text" placeholder="이름을 입력하세요" required>
         </div>
         <div>
-          <label for="phone">연락처</label>
-          <input id="phone" name="phone" type="tel" placeholder="010-1234-5678" required>
+          <label for="contact-phone">전화번호</label>
+          <input id="contact-phone" name="phone" type="tel" placeholder="010-0000-0000" required>
           <p class="hint">상담 및 안내를 위해 연락 가능한 번호를 남겨주세요.</p>
         </div>
         <div>
-          <label for="message">문의 내용</label>
-          <textarea id="message" name="message" placeholder="필요하신 서비스나 궁금하신 점을 남겨주세요." required></textarea>
+          <label for="contact-message">문의 내용</label>
+          <textarea id="contact-message" name="message" placeholder="문의하실 내용을 작성해주세요." required></textarea>
         </div>
         <button type="submit">무료 신청하기</button>
       </form>
@@ -456,15 +582,21 @@
   <div class="desktop-ribbon">
     <div class="ribbon-inner">
       <div class="ribbon-left ribbon-form">
-        <input type="text" placeholder="성함" aria-label="성함">
-        <input type="tel" placeholder="연락처" aria-label="연락처">
-        <button type="button">신청하기</button>
+        <img class="ribbon-logo" src="./iqlab-logo-white.png" alt="IQLAB 아이큐랩 시스템 로고">
+        <div class="ribbon-form-item">
+          <input type="text" placeholder="이름" aria-label="이름">
+        </div>
+        <div class="ribbon-form-item">
+          <input type="tel" placeholder="전화번호" aria-label="전화번호">
+        </div>
+        <div class="ribbon-form-item">
+          <input type="text" placeholder="문의내용" aria-label="문의내용">
+        </div>
+        <div class="ribbon-form-item">
+          <button type="button">신청하기</button>
+        </div>
       </div>
       <div class="ribbon-right">
-        <div>
-          <div class="ribbon-eyebrow">지금 바로</div>
-          <div class="ribbon-headline"><span class="accent">무료상담</span> 신청하기</div>
-        </div>
         <div class="ribbon-timer" id="ribbon-timer">
           <span id="ribbon-timer-text">02:00</span>
           <small>실시간</small>
@@ -473,6 +605,12 @@
     </div>
   </div>
 
+  <div class="desktop-actions">
+    <div class="mobile-icons">
+      <button class="icon-btn" id="desktop-to-top" aria-label="맨 위로">↑</button>
+      <button class="icon-btn" onclick="window.location.href='tel:15770297'" aria-label="전화">☎</button>
+    </div>
+  </div>
   <div class="mobile-actions">
     <div class="mobile-icons">
       <button class="icon-btn" id="to-top" aria-label="맨 위로">↑</button>
@@ -487,20 +625,40 @@
 
   <div class="drawer-overlay"></div>
   <aside class="side-drawer" aria-label="모바일 메뉴">
-    <img class="drawer-logo" src="./iqlab-logo.png" alt="IQLAB 아이큐랩 시스템 로고">
+    <button class="drawer-close" aria-label="메뉴 닫기">×</button>
     <div class="drawer-links">
-      <a href="#">홈</a>
-      <a href="#">소개</a>
-      <a href="#">무료신청하기</a>
+      <a href="#top" class="drawer-link">소개</a>
+      <a href="https://www.iq-edu.co.kr/newspaper" target="_blank" rel="noopener noreferrer" class="drawer-link">아이Q신문</a>
+      <a href="#contact-form" class="drawer-link">무료신청하기</a>
     </div>
+    <img class="drawer-logo" src="./iqlab-logo.png" alt="IQLAB 아이큐랩 시스템 로고">
   </aside>
 
   <script>
     const body = document.body;
+    const header = document.querySelector('header');
     const menuBtn = document.querySelector('.menu-btn');
     const overlay = document.querySelector('.drawer-overlay');
+    const drawerClose = document.querySelector('.drawer-close');
     const toTopBtn = document.getElementById('to-top');
+    const desktopToTopBtn = document.getElementById('desktop-to-top');
     const ribbonTimerText = document.getElementById('ribbon-timer-text');
+
+    function handleScroll() {
+      if (window.scrollY > 10) {
+        header.classList.add('scrolled');
+      } else {
+        header.classList.remove('scrolled');
+      }
+    }
+
+    // 초기 상태에서 scrolled 클래스 제거
+    if (header) {
+      header.classList.remove('scrolled');
+    }
+
+    window.addEventListener('scroll', handleScroll);
+    handleScroll();
 
     function closeDrawer() {
       body.classList.remove('drawer-open');
@@ -516,9 +674,41 @@
     });
 
     overlay.addEventListener('click', closeDrawer);
+    if (drawerClose) {
+      drawerClose.addEventListener('click', closeDrawer);
+    }
+
+    // 드로어 링크 클릭 시 드로어 닫기 및 스크롤
+    const drawerLinks = document.querySelectorAll('.drawer-link');
+    drawerLinks.forEach(link => {
+      link.addEventListener('click', (e) => {
+        const href = link.getAttribute('href');
+        if (href && href.startsWith('#')) {
+          e.preventDefault();
+          closeDrawer();
+          setTimeout(() => {
+            if (href === '#top') {
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            } else {
+              const target = document.querySelector(href);
+              if (target) {
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+              }
+            }
+          }, 250);
+        } else {
+          closeDrawer();
+        }
+      });
+    });
 
     if (toTopBtn) {
       toTopBtn.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    }
+    if (desktopToTopBtn) {
+      desktopToTopBtn.addEventListener('click', () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
       });
     }
